@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDBMembership", "RavenDBMembership\RavenDBMembership.csproj", "{07CCE5B6-9111-46DC-AAEC-00D80E19FE4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenSupportLib", "RavenSupportLib\RavenSupportLib.csproj", "{2090F9D8-D7AA-4933-9C95-ADDFE5EADDDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07CCE5B6-9111-46DC-AAEC-00D80E19FE4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CCE5B6-9111-46DC-AAEC-00D80E19FE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CCE5B6-9111-46DC-AAEC-00D80E19FE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CCE5B6-9111-46DC-AAEC-00D80E19FE4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2090F9D8-D7AA-4933-9C95-ADDFE5EADDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2090F9D8-D7AA-4933-9C95-ADDFE5EADDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2090F9D8-D7AA-4933-9C95-ADDFE5EADDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2090F9D8-D7AA-4933-9C95-ADDFE5EADDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
