@@ -8,7 +8,7 @@ namespace RavenSupportLib
 {
     public interface IDocument
     {
-        string Id { get; set; }
+        int Id { get; set; }
     }
 
     public sealed class RavenRepository : IRavenRepository
@@ -41,7 +41,6 @@ namespace RavenSupportLib
             return _session.Query<T>();
         }
         #endregion
-
 
         #region Assets
 
