@@ -3,15 +3,51 @@ using System.Text.RegularExpressions;
 using Raven.Client;
 using System.Linq;
 using Raven.Client.Indexes;
+using Newtonsoft.Json;
 
 namespace RavenSupportLib
 {
+
+
+    public class DocumentPlaceholder<T>
+    {
+        [JsonIgnore]
+        public readonly DocumentPointer<T> _DocTypePointer = new DocumentPointer<T>();
+
+        public string DocKey
+        {
+            get
+            {
+                return _DocTypePointer.Key;
+            }
+            set
+            {
+                _DocTypePointer.Key = value;
+            }
+        }
+
+        [JsonIgnore]
+        public int DocId
+        {
+            get
+            {
+                return _DocTypePointer.Id;
+            }
+            set
+            {
+                _DocTypePointer.Id = value;
+            }
+        }
+
+        public string Name { get; set; }
+   
+    }
 
     public sealed class DocumentPointer<T> : IDocumentPointer
     {
 
         public DocumentPointer()
-            : this((typeof(T).Name.ToLower() + "s"))
+            : this((Raven.Client.Util.Inflector.Pluralize(typeof(T).Name)))
         {
         }
 
