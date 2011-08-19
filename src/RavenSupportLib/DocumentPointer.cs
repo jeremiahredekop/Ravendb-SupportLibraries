@@ -1,63 +1,72 @@
 using System;
 using System.Text.RegularExpressions;
 using Raven.Client;
-using System.Linq;
-using Raven.Client.Indexes;
-using Newtonsoft.Json;
+using Raven.Client.Util;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb
 {
-
-
-    public class DocumentPlaceholder<T>
-    {
-        [JsonIgnore]
-        public readonly DocumentPointer<T> _DocTypePointer = new DocumentPointer<T>();
-
-        public string DocKey
-        {
-            get
-            {
-                return _DocTypePointer.Key;
-            }
-            set
-            {
-                _DocTypePointer.Key = value;
-            }
-        }
-
-        [JsonIgnore]
-        public int DocId
-        {
-            get
-            {
-                return _DocTypePointer.Id;
-            }
-            set
-            {
-                _DocTypePointer.Id = value;
-            }
-        }
-
-        public string Name { get; set; }
-   
-    }
-
     public sealed class DocumentPointer<T> : IDocumentPointer
     {
+        #region Helpers
+        
+        private readonly string _keyRootName;
+        private int _id;
+        private string _key;
+
+        #endregion
 
         public DocumentPointer()
-            : this((Raven.Client.Util.Inflector.Pluralize(typeof(T).Name)))
+            : this((Inflector.Pluralize(typeof (T).Name)))
         {
         }
 
         public DocumentPointer(string keyRootName)
         {
-            _KeyRootName = keyRootName;
+            _keyRootName = keyRootName;
         }
 
-        private readonly string _KeyRootName;
-        public static int KeyToId(string key, string keyPath )
+        #region IDocumentPointer Members
+
+        public int Id
+        {
+            get { return _id; }
+            set { SetKeyFromId(value); }
+        }
+
+        public string Key
+        {
+            get { return _key; }
+            set { SetIdFromKey(value); }
+        }
+
+        public Type DocumentType
+        {
+            get { return typeof (T); }
+        }
+
+
+        object IDocumentPointer.GetRelatedDocument(IDocumentSession session)
+        {
+            return GetRelatedDocument(session);
+        }
+
+        #endregion
+
+        private void SetKeyFromId(int value)
+        {
+            _id = value;
+            string newKey = IdToKey(_id, _keyRootName);
+            _key = newKey;
+        }
+
+        private void SetIdFromKey(string value)
+        {
+            _key = value;
+            int newId = KeyToId(_key, _keyRootName);
+            _id = newId;
+        }
+
+        public static int KeyToId(string key, string keyPath)
         {
             if (String.IsNullOrEmpty(key))
                 return 0;
@@ -66,73 +75,24 @@ namespace RavenSupportLib
 
             string stringValue = Regex.Match(key, String.Format("({0}/)([0-9]*)", keyPath)).Groups[2].Value;
 
-            var value = Int32.Parse(stringValue);
+            int value = Int32.Parse(stringValue);
             return value;
         }
 
-        public static string IdToKey(int id,string keyPath)
+        public static string IdToKey(int id, string keyPath)
         {
             if (id == 0)
                 return String.Empty;
 
             if (keyPath.EndsWith("/"))
-                keyPath = keyPath.Remove(keyPath.Length -1);
+                keyPath = keyPath.Remove(keyPath.Length - 1);
 
             return String.Format("{1}/{0}", id, keyPath);
-        }
-
-
-        private int _Id;
-        public int Id
-        {
-            get
-            {
-                return _Id;
-            }
-            set
-            {
-                _Id = value;
-
-                var newKey = IdToKey(_Id, _KeyRootName);
-
-                if (newKey != _Key)
-                    _Key = newKey;
-            }
-        }
-        private string _Key;
-        public string Key
-        {
-            get
-            {
-                return _Key;
-            }
-            set
-            {
-                _Key = value;
-                var newId = KeyToId(_Key, _KeyRootName);
-
-                if (_Id != newId)
-                    _Id = newId;
-            }
-        }
-        public Type DocumentType
-        {
-            get
-            {
-                return typeof(T);
-            }
         }
 
         public T GetRelatedDocument(IDocumentSession session)
         {
             return session.Load<T>(Key);
-        }
-
-
-
-        object IDocumentPointer.GetRelatedDocument(IDocumentSession session)
-        {
-            return this.GetRelatedDocument(session);
         }
     }
 }
