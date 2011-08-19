@@ -2,37 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using Raven.Client;
+using Raven.Client.Indexes;
 using Raven.Client.Linq;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb
 {
-    public interface IDocument
-    {
-        int Id { get; set; }
-    }
-
     public sealed class RavenRepository : IRavenRepository
     {
         #region Constuctors
+
         public RavenRepository(IDocumentSession session, bool liveQueries)
         {
             _session = session;
             _LiveQueries = liveQueries;
         }
+
         #endregion
 
         #region Helpers
 
-
         private IRavenQueryable<T> GetQuery<T, TIndexCreator>()
-             where TIndexCreator : Raven.Client.Indexes.AbstractIndexCreationTask, new()
+            where TIndexCreator : AbstractIndexCreationTask, new()
         {
-
             if (_LiveQueries)
                 return _session.Query<T, TIndexCreator>().Customize(a => a.WaitForNonStaleResultsAsOfNow());
 
             return _session.Query<T, TIndexCreator>();
         }
+
         private IRavenQueryable<T> GetQuery<T>()
         {
             if (_LiveQueries)
@@ -40,13 +37,17 @@ namespace RavenSupportLib
 
             return _session.Query<T>();
         }
+
         #endregion
 
         #region Assets
 
         private readonly bool _LiveQueries;
         private readonly IDocumentSession _session;
+
         #endregion
+
+        #region IRavenRepository Members
 
         public T SingleOrDefault<T>(Func<T, bool> predicate)
         {
@@ -68,11 +69,6 @@ namespace RavenSupportLib
             _session.Delete(item);
         }
 
-        public void Save()
-        {
-            _session.SaveChanges();
-        }
-
         public IRavenQueryable<T> Query<T>()
         {
             return GetQuery<T>();
@@ -80,7 +76,6 @@ namespace RavenSupportLib
 
         public T GetById<T>(int id)
         {
-
             return _session.Load<T>(id);
         }
 
@@ -92,7 +87,7 @@ namespace RavenSupportLib
 
 
         public IRavenQueryable<T> Query<T, TIndexCreator>()
-             where TIndexCreator : Raven.Client.Indexes.AbstractIndexCreationTask, new()
+            where TIndexCreator : AbstractIndexCreationTask, new()
         {
             return GetQuery<T, TIndexCreator>();
         }
@@ -102,5 +97,11 @@ namespace RavenSupportLib
             return _session.Load<T>(ids: ids);
         }
 
+        #endregion
+
+        public void Save()
+        {
+            _session.SaveChanges();
+        }
     }
 }

@@ -2,21 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Linq;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb.Loops
 {
     internal class AyendesObjectLoop<T> : AyendesLoop<T>
     {
+        private readonly IRavenQueryable<T> _input;
 
-        private readonly IRavenQueryable<T> _Input;
         public AyendesObjectLoop(IRavenQueryable<T> input)
         {
-            _Input = input;
+            _input = input;
         }
 
         protected override List<T> PerformQuery(int queryStartPosition)
         {
-            return _Input.Skip(queryStartPosition).ToList();
+            return _input.Skip(queryStartPosition).ToList();
         }
-
     }
 }

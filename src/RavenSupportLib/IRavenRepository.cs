@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Raven.Client.Indexes;
 using Raven.Client.Linq;
-namespace RavenSupportLib
+
+namespace GeniusCode.RavenDb
 {
     public interface IRavenRepository
     {
@@ -10,10 +12,9 @@ namespace RavenSupportLib
         void Delete<T>(T item);
         T SingleOrDefault<T>(Func<T, bool> predicate);
         IRavenQueryable<T> Query<T>();
-        IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : Raven.Client.Indexes.AbstractIndexCreationTask, new();
+        IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new();
         T GetById<T>(int id);
         T GetByKey<T>(string key);
         T[] GetByKeys<T>(IEnumerable<string> keys);
     }
-
 }

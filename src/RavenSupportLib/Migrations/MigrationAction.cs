@@ -1,7 +1,7 @@
 using System;
 using Raven.Json.Linq;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb.Migrations
 {
     public class MigrationAction
     {
@@ -10,8 +10,8 @@ namespace RavenSupportLib
             GetReplacement = getReplacement;
             QueryContents = queryContents;
             IndexName = indexName;
-
         }
+
         public string IndexName { get; private set; }
         public string QueryContents { get; private set; }
         public Func<RavenJObject, RavenJObject> GetReplacement { get; private set; }

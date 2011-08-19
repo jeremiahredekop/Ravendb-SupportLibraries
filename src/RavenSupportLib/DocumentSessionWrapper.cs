@@ -3,7 +3,7 @@ using System.Transactions;
 using Raven.Client;
 using Raven.Client.Document;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb
 {
     public sealed class DocumentSessionWrapper : IDisposable
     {
@@ -23,14 +23,22 @@ namespace RavenSupportLib
 
         public DocumentSessionWrapper(string url)
         {
-            _Store = new DocumentStore { Url = url };
+            _Store = new DocumentStore {Url = url};
             _Store.Initialize();
             _disposeStore = true;
         }
 
         #endregion
 
-        #region Public Members
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            if (_disposeStore)
+                _Store.Dispose();
+        }
+
+        #endregion
 
         public void DoOnSessionWithSave(Action<IDocumentSession> sessionAction)
         {
@@ -58,10 +66,11 @@ namespace RavenSupportLib
         public void DoOnRepository(Action<IRavenRepository> repAction, bool save = false)
         {
             Action<IDocumentSession, IDocumentStore> action = (ses, sto) =>
-                {
-                    IRavenRepository rep = new RavenRepository(ses,true);
-                    repAction(rep);
-                };
+                                                                  {
+                                                                      IRavenRepository rep = new RavenRepository(ses,
+                                                                                                                 true);
+                                                                      repAction(rep);
+                                                                  };
 
             DoOnStore(action, save);
         }
@@ -74,13 +83,11 @@ namespace RavenSupportLib
                 Perform_Do(sessionAction);
         }
 
-        #endregion
-
         #region helpers
 
         private void Perform_Do(Action<IDocumentSession, IDocumentStore> sessionAction)
         {
-            using (var session = _Store.OpenSession())
+            using (IDocumentSession session = _Store.OpenSession())
             {
                 sessionAction(session, _Store);
             }
@@ -90,7 +97,7 @@ namespace RavenSupportLib
         {
             using (var t = new TransactionScope())
             {
-                using (var session = _Store.OpenSession())
+                using (IDocumentSession session = _Store.OpenSession())
                 {
                     sessionAction(session, _Store);
                     session.SaveChanges();
@@ -98,12 +105,7 @@ namespace RavenSupportLib
                 t.Complete();
             }
         }
-        #endregion
 
-        public void Dispose()
-        {
-            if (_disposeStore)
-                _Store.Dispose();
-        }
+        #endregion
     }
 }

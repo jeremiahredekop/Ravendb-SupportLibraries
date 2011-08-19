@@ -1,42 +1,41 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Json.Linq;
-using System.Text.RegularExpressions;
 
-namespace RavenSupportLib
+namespace GeniusCode.RavenDb.Loops
 {
     internal class AyendesJSonQueryResultsLoop : AyendesLoop<RavenJObject>
     {
+        private readonly IDocumentStore _documentStore;
+        private readonly string _indexName;
+        private readonly string _queryContents;
+        private readonly int _querySize;
 
         public AyendesJSonQueryResultsLoop(IDocumentStore documentStore, string indexName, string queryContents)
             : this(documentStore, indexName, queryContents, 128)
         {
         }
-        public AyendesJSonQueryResultsLoop(IDocumentStore documentStore, string indexName, string queryContents, int querySize)
-        {
-            _QuerySize = querySize;
-            _QueryContents = queryContents;
-            _IndexName = indexName;
-            _DocumentStore = documentStore;
-        }
 
-        private readonly IDocumentStore _DocumentStore;
-        private readonly string _IndexName;
-        private readonly string _QueryContents;
-        private readonly int _QuerySize;
+        public AyendesJSonQueryResultsLoop(IDocumentStore documentStore, string indexName, string queryContents,
+                                           int querySize)
+        {
+            _querySize = querySize;
+            _queryContents = queryContents;
+            _indexName = indexName;
+            _documentStore = documentStore;
+        }
 
         protected override List<RavenJObject> PerformQuery(int queryStartPosition)
         {
-            var q = _DocumentStore.DatabaseCommands.Query(_IndexName, new IndexQuery
-            {
-                Query = _QueryContents,
-                PageSize = _QuerySize,
-                Start = queryStartPosition
-            }, null);
+            QueryResult q = _documentStore.DatabaseCommands.Query(_indexName, new IndexQuery
+                                                                                  {
+                                                                                      Query = _queryContents,
+                                                                                      PageSize = _querySize,
+                                                                                      Start = queryStartPosition
+                                                                                  }, null);
 
             return q.Results;
         }
@@ -45,17 +44,17 @@ namespace RavenSupportLib
         {
             var cmds = new List<ICommandData>();
 
-            var items = GetAll();
+            List<RavenJObject> items = GetAll();
 
             items.ForEach(ri =>
-                {
-                    var itemToSave = toApply(ri);
-                    if (itemToSave != null)
-                    {
-                        var putData = itemToSave.ToPutCommandData();
-                        cmds.Add(putData);
-                    }
-                });
+                              {
+                                  RavenJObject itemToSave = toApply(ri);
+                                  if (itemToSave != null)
+                                  {
+                                      PutCommandData putData = itemToSave.ToPutCommandData();
+                                      cmds.Add(putData);
+                                  }
+                              });
 
             return cmds;
         }

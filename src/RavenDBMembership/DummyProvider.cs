@@ -13,10 +13,10 @@ namespace RavenDBMembership
 
         static DummyProvider()
         {
-            MyDocument = doit();
+            MyDocument = Doit();
         }
 
-        private static IDocumentStore doit()
+        private static IDocumentStore Doit()
         {
             var documentStore = new DocumentStore
             {
@@ -26,10 +26,10 @@ namespace RavenDBMembership
             return documentStore;
         }
 
-        private static IEnumerable<IDocumentStore> doits()
+        private static IEnumerable<IDocumentStore> Doits()
         {
-            var item = doit();
-            return new IDocumentStore[] { item };
+            var item = Doit();
+            return new[] { item };
         }
 
         public static ServiceLocatorProvider DelegateItem
@@ -45,7 +45,7 @@ namespace RavenDBMembership
         {
             if (typeof(TService) == typeof(IDocumentStore))
             {
-                var item = (TService)doit();
+                var item = (TService)Doit();
                 return new TService[] { item };
             }
             return null;
@@ -53,32 +53,32 @@ namespace RavenDBMembership
 
         public IEnumerable<object> GetAllInstances(Type serviceType)
         {
-            return doits();
+            return Doits();
         }
 
         public TService GetInstance<TService>(string key)
         {
-            return (TService)doit();
+            return (TService)Doit();
         }
 
         public TService GetInstance<TService>()
         {
-            return (TService)doit();
+            return (TService)Doit();
         }
 
         public object GetInstance(Type serviceType, string key)
         {
-            return doit();
+            return Doit();
         }
 
         public object GetInstance(Type serviceType)
         {
-            return doit();
+            return Doit();
         }
 
         public object GetService(Type serviceType)
         {
-            return doit();
+            return Doit();
         }
     }
 }
