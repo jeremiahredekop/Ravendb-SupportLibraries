@@ -1,8 +1,6 @@
-
 namespace GeniusCode.RavenDb.Tests.MasterDetailDocuments
 {
-
-    public class PeerDocument :IDocument
+    public class PeerDocument : IDocument
     {
         #region Implementation of IDocument
 
@@ -10,16 +8,14 @@ namespace GeniusCode.RavenDb.Tests.MasterDetailDocuments
 
         #endregion
 
-
         public string Name { get; set; }
 
-        public DocumentPlaceholder<MasterDocument> MasterDocumentPlaceHolder { get; set; } 
-
+        public DocumentPlaceholder<MasterDocument> MasterDocumentPlaceHolder { get; set; }
     }
 
     public class MasterDocument : IDocument
     {
-        public DocumentPlaceholder<PeerDocument> PeerDocumentPlaceHolder { get; set; } 
+        public DocumentPlaceholder<PeerDocument> PeerDocumentPlaceHolder { get; set; }
 
         public string Name { get; set; }
         public DocumentPlaceholderCollection<DetailDocument> DetailPlaceHolders { get; set; }
