@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentPointerTests.cs" />
+    <Compile Include="JSonSerialize_Tests.cs" />
     <Compile Include="MasterDetailDocuments\DetailDocument.cs" />
     <Compile Include="MasterDetailDocuments\MasterDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

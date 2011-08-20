@@ -66,7 +66,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentPlaceholder.cs" />
+    <Compile Include="DocumentPlaceholderCollection.cs" />
     <Compile Include="IDocument.cs" />
+    <Compile Include="IDocumentPlaceholder.cs" />
+    <Compile Include="IDocumentPlaceholderCollection.cs" />
+    <Compile Include="Json\SerializationExtensions.cs" />
     <Compile Include="Loops\AyendesJSonQueryResultsLoop.cs" />
     <Compile Include="Loops\AyendesLoop.cs" />
     <Compile Include="Loops\AyendesObjectLoop.cs" />

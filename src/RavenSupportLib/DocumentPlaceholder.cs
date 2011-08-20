@@ -1,27 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
 namespace GeniusCode.RavenDb
 {
-
-    public interface IDocumentPlaceholder
-    {
-        string DocKey { get; }
-        [JsonIgnore]
-        int DocId { get; set; }
-
-        string Name { get; set; }
-    }
-
     public class DocumentPlaceholder<T> : IDocumentPlaceholder where T : IDocument
     {
-
         [JsonIgnore]
         public readonly DocumentPointer<T> DocTypePointer = new DocumentPointer<T>();
+
+        #region IDocumentPlaceholder Members
 
         public string DocKey
         {
@@ -38,114 +26,61 @@ namespace GeniusCode.RavenDb
 
         public string Name { get; set; }
 
+        #endregion
 
-        public static DocumentPlaceholder<T> CreateFrom(T t, Func<T, IDocumentPlaceholderCollection> reverseFunc, IDocument currentDoc)
+        public static DocumentPlaceholder<T>
+            CreatePlaceholderAndUpdateReverseCollection(T t, IDocumentPlaceholderCollection reverseCollection,
+                                                                                         IDocument currentDoc)
         {
-            var documentPlaceholder = GetPointer(t);
+            UpdatePointerCollectionReverse(reverseCollection, currentDoc);
+            return CreatePlaceholder(t);
+        }
 
+        private static void UpdatePointerCollectionReverse(IDocumentPlaceholderCollection reverseCollection,
+                                                           IDocument currentDoc)
+        {
+            reverseCollection.AddIfNew(currentDoc);
+        }
 
-
-            if (reverseFunc != null && currentDoc != null)
-            {
-                var collection = reverseFunc(t);
-                collection.AddIfNew(currentDoc);
-            }
-
-            return documentPlaceholder;
+        public static DocumentPlaceholder<T> CreatePlaceholder(T t)
+        {
+            return GetPointer(t);
         }
 
 
-
-        public static DocumentPlaceholder<T> CreateFrom(T t, Func<T, IDocumentPlaceholder> reverseFunc, IDocument currentDoc)
+        public static DocumentPlaceholder<T> CreatePlaceholderAndReverse(T t, IDocumentPlaceholder reversePlaceholder,
+                                                                         IDocument currentDoc)
         {
-            var documentPlaceholder = GetPointer(t);
-
-
-            UpdatePeerPointerReverse(t, reverseFunc, currentDoc);
-
-            return documentPlaceholder;
+            UpdatePeerPointerReverse(reversePlaceholder, currentDoc);
+            return CreatePlaceholder(t);
         }
 
-        private static void UpdatePeerPointerReverse(T t, Func<T, IDocumentPlaceholder> reverseFunc, IDocument currentDoc)
+        private static void UpdatePeerPointerReverse(IDocumentPlaceholder reversePlaceholder,
+                                                     IDocument currentDoc)
         {
-            if (reverseFunc == null || currentDoc == null) return;
+            if (reversePlaceholder == null) throw new ArgumentNullException("reversePlaceholder");
+            if (currentDoc == null) throw new ArgumentNullException("currentDoc");
 
-            var placeholder = reverseFunc(t);
-            placeholder.DocId = currentDoc.Id;
-            placeholder.Name = GetNameFromDocumentUsingReflection(currentDoc);
+
+            reversePlaceholder.DocId = currentDoc.Id;
+            reversePlaceholder.Name = GetNameFromDocumentUsingReflection(currentDoc);
         }
 
         internal static DocumentPlaceholder<T> GetPointer(T t)
         {
             var documentPlaceholder = new DocumentPlaceholder<T> { DocId = t.Id, Name = GetNameFromDocumentUsingReflection(t) };
-
             return documentPlaceholder;
         }
 
         private static string GetNameFromDocumentUsingReflection(IDocument t)
         {
-            var info = t.GetType().GetProperty("Name", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.Public);
+            PropertyInfo info = t.GetType().GetProperty("Name",
+                                                        BindingFlags.Instance | BindingFlags.GetProperty |
+                                                        BindingFlags.Public);
 
             if (info == null) return string.Empty;
 
             return info.GetValue(t, null) as string;
         }
-    }
-
-    public class DocumentPlaceholderCollection<T> : IDocumentPlaceholderCollection, IEnumerable<DocumentPlaceholder<T>> where T : class, IDocument
-    {
-        [JsonIgnore]
-        private Dictionary<int, DocumentPlaceholder<T>> _placeholdersDictionary = new Dictionary<int, DocumentPlaceholder<T>>();
-
-
-        private List<DocumentPlaceholder<T>> _items = new List<DocumentPlaceholder<T>>();
-        public DocumentPlaceholder<T>[] Items
-        {
-            get { return _items.ToArray(); }
-            set
-            {
-                _items = value.ToList();
-                _placeholdersDictionary = _items.ToDictionary(a => a.DocId);
-            }
-        }
-
-        public void AddIfNew(T item)
-        {
-            if (!_placeholdersDictionary.ContainsKey(item.Id))
-            {
-                var placeholder = DocumentPlaceholder<T>.GetPointer(item);
-                _placeholdersDictionary.Add(item.Id, placeholder);
-            }
-
-        }
-
-        #region Implementation of IEnumerable
-
-        IEnumerator<DocumentPlaceholder<T>> IEnumerable<DocumentPlaceholder<T>>.GetEnumerator()
-        {
-            return _placeholdersDictionary.Values.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _placeholdersDictionary.Values.GetEnumerator();
-        }
-
-        #endregion
-
-        #region Implementation of IDocumentPlaceholderCollection
-
-        void IDocumentPlaceholderCollection.AddIfNew(object item)
-        {
-            var castedItem = (T)item;
-            AddIfNew(castedItem as T);
-        }
-
-        #endregion
-    }
-
-    public interface IDocumentPlaceholderCollection
-    {
-        void AddIfNew(object item);
     }
 }

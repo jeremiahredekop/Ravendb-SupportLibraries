@@ -8,7 +8,7 @@ namespace GeniusCode.RavenDb
     public sealed class DocumentPointer<T> : IDocumentPointer
     {
         #region Helpers
-        
+
         private readonly string _keyRootName;
         private int _id;
         private string _key;
