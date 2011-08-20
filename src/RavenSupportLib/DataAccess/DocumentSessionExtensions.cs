@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using GeniusCode.RavenDb.Loops;
+using GeniusCode.RavenDb.Referential;
 using Raven.Abstractions.Commands;
 using Raven.Client;
 using Raven.Client.Linq;
 using Raven.Json.Linq;
 
-namespace GeniusCode.RavenDb
+namespace GeniusCode.RavenDb.DataAccess
 {
     public static class DocumentSessionExtensions
     {

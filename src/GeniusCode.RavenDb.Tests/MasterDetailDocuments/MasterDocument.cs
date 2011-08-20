@@ -1,3 +1,5 @@
+using GeniusCode.RavenDb.Referential;
+
 namespace GeniusCode.RavenDb.Tests.MasterDetailDocuments
 {
     public class PeerDocument : IDocument
@@ -10,15 +12,24 @@ namespace GeniusCode.RavenDb.Tests.MasterDetailDocuments
 
         public string Name { get; set; }
 
-        public DocumentPlaceholder<MasterDocument> MasterDocumentPlaceHolder { get; set; }
+        public DocumentPlaceholder<MasterDocument, WhatPeerNeedsToKnowAboutMaster> MasterDocumentPlaceHolder { get; set; }
+    }
+
+    public class WhatPeerNeedsToKnowAboutMaster : IDocumentPointerData
+    {
+        #region Implementation of IDocumentPointerData
+
+        public string Name { get; set; }
+
+        #endregion
     }
 
     public class MasterDocument : IDocument
     {
-        public DocumentPlaceholder<PeerDocument> PeerDocumentPlaceHolder { get; set; }
+        public DocumentPlaceholder<PeerDocument, WhatMasterNeedsToKnowAboutPeer> PeerDocumentPlaceHolder { get; set; }
 
         public string Name { get; set; }
-        public DocumentPlaceholderCollection<DetailDocument> DetailPlaceHolders { get; set; }
+        public DocumentPlaceholderCollection<DetailDocument, WhatMasterNeedsToKnowAboutDetail> DetailPlaceHolders { get; set; }
 
         #region IDocument Members
 
@@ -26,4 +37,23 @@ namespace GeniusCode.RavenDb.Tests.MasterDetailDocuments
 
         #endregion
     }
+
+    public class WhatMasterNeedsToKnowAboutPeer : IDocumentPointerData
+    {
+        #region Implementation of IDocumentPointerData
+
+        public string Name { get; set; }
+
+        #endregion
+    }
+    public class WhatMasterNeedsToKnowAboutDetail : IDocumentPointerData
+    {
+        #region Implementation of IDocumentPointerData
+
+        public string Name { get; set; }
+
+        #endregion
+    }
+
+
 }

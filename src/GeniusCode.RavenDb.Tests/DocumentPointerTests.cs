@@ -15,7 +15,7 @@ namespace GeniusCode.RavenDb.Tests
             Assert.IsNotNull((placeHolder));
             Assert.AreEqual("PeerDocuments/100", placeHolder.DocKey);
             Assert.AreEqual(100, placeHolder.DocId);
-            //Assert.AreEqual("Frank", placeHolder.Name);
+            Assert.AreEqual("Frank", placeHolder.Data.Name);
         }
 
         private static void AssertPointIdKeyAndNameReverse(PeerDocument peer)
@@ -24,7 +24,7 @@ namespace GeniusCode.RavenDb.Tests
             Assert.IsNotNull(placeholder);
             Assert.AreEqual("MasterDocuments/7", placeholder.DocKey);
             Assert.AreEqual(7, placeholder.DocId);
-            //Assert.AreEqual("Bill", placeholder.Name);
+            Assert.AreEqual("Bill", placeholder.Data.Name);
         }
 
         private static void AssertPointIdAndKeyOnCollection(MasterDocument master)
@@ -33,7 +33,7 @@ namespace GeniusCode.RavenDb.Tests
 
             Assert.AreEqual(1, master.DetailPlaceHolders.Items.Count());
             Assert.AreEqual("DetailDocuments/25", placeholder.DocKey);
-            //Assert.AreEqual("Cheetos", placeholder.Name);
+            Assert.AreEqual("Cheetos", placeholder.Data.Name);
         }
 
         private static void AssertPointIdAndKeyOnCollectionReverse(DetailDocument detail)
@@ -41,7 +41,7 @@ namespace GeniusCode.RavenDb.Tests
             var placeholder = detail.MasterDocumentPointer;
             Assert.IsNotNull(placeholder);
             Assert.AreEqual("MasterDocuments/1", placeholder.DocKey);
-            //Assert.AreEqual("Chips", placeholder.Name);
+            Assert.AreEqual("Chips", placeholder.Data.Name);
         }
 
         #endregion

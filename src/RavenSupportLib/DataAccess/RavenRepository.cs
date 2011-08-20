@@ -5,7 +5,7 @@ using Raven.Client;
 using Raven.Client.Indexes;
 using Raven.Client.Linq;
 
-namespace GeniusCode.RavenDb
+namespace GeniusCode.RavenDb.DataAccess
 {
     public sealed class RavenRepository : IRavenRepository
     {

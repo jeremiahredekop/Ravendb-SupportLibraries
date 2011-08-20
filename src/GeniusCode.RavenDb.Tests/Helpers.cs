@@ -1,4 +1,5 @@
 using System;
+using GeniusCode.RavenDb.Referential;
 using GeniusCode.RavenDb.Tests.MasterDetailDocuments;
 
 namespace GeniusCode.RavenDb.Tests
@@ -19,12 +20,16 @@ namespace GeniusCode.RavenDb.Tests
                            {
                                Id = 100,
                                Name = "Frank",
-                               MasterDocumentPlaceHolder = new DocumentPlaceholder<MasterDocument>()
+                               MasterDocumentPlaceHolder = new DocumentPlaceholder<MasterDocument, WhatPeerNeedsToKnowAboutMaster>()
                            };
 
+            var peerData = new WhatMasterNeedsToKnowAboutPeer { Name = peer.Name };
 
-            master.PeerDocumentPlaceHolder = DocumentPlaceholder<PeerDocument>.CreatePlaceholderAndReverse(peer.Id, peer.MasterDocumentPlaceHolder,
-                                                                                                           master.Id);
+            var masterData = new WhatPeerNeedsToKnowAboutMaster { Name = master.Name };
+
+
+            master.PeerDocumentPlaceHolder = DocumentPlaceholder<PeerDocument, WhatMasterNeedsToKnowAboutPeer>
+                .CreatePlaceholderAndReverse(peer.Id, peerData, peer.MasterDocumentPlaceHolder, master.Id, masterData);
             return peer;
         }
 
@@ -34,19 +39,22 @@ namespace GeniusCode.RavenDb.Tests
                              {
                                  Id = 1,
                                  Name = "Chips",
-                                 DetailPlaceHolders = new DocumentPlaceholderCollection<DetailDocument>()
+                                 DetailPlaceHolders = new DocumentPlaceholderCollection<DetailDocument, WhatMasterNeedsToKnowAboutDetail>()
                              };
+
+            var masterData = new WhatDetailNeedsToKnowAboutMaster { Name = master.Name };
 
             detail = new DetailDocument
                          {
                              Id = 25,
                              Name = "Cheetos"
                          };
+            var detailData = new WhatMasterNeedsToKnowAboutDetail { Name = detail.Name };
+
 
             detail.MasterDocumentPointer =
-                DocumentPlaceholder<MasterDocument>.CreatePlaceholderAndUpdateReverseCollection(master.Id, master.
-                                                                                                    DetailPlaceHolders,
-                                                                                                detail.Id);
+                DocumentPlaceholder<MasterDocument, WhatDetailNeedsToKnowAboutMaster>
+                .CreatePlaceholderAndUpdateReverseCollection(master.Id, masterData, master.DetailPlaceHolders, detail.Id, detailData);
             return master;
         }
     }

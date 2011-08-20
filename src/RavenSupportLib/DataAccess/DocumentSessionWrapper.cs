@@ -3,7 +3,7 @@ using System.Transactions;
 using Raven.Client;
 using Raven.Client.Document;
 
-namespace GeniusCode.RavenDb
+namespace GeniusCode.RavenDb.DataAccess
 {
     public sealed class DocumentSessionWrapper : IDisposable
     {

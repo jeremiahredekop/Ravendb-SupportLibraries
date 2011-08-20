@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GeniusCode.RavenDb.DataAccess;
 using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Client;

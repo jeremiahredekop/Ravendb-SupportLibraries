@@ -1,7 +1,7 @@
 using System;
 using Raven.Client;
 
-namespace GeniusCode.RavenDb
+namespace GeniusCode.RavenDb.Referential
 {
     public interface IDocumentPointer
     {

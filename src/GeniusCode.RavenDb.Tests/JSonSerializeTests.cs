@@ -1,4 +1,5 @@
 ﻿using System;
+using GeniusCode.RavenDb.Referential;
 using GeniusCode.RavenDb.Tests.MasterDetailDocuments;
 using NUnit.Framework;
 
@@ -11,7 +12,7 @@ namespace GeniusCode.RavenDb.Tests
         public void ShouldDeserializeCollection()
         {
             const string myString = "{\"Items\":[{\"DocKey\":\"DetailDocuments/25\",\"Name\":\"Cheetos\"}]}";
-            var obj = myString.DeserializeFromString<DocumentPlaceholderCollection<DetailDocument>>();
+            var obj = myString.DeserializeFromString<DocumentPlaceholderCollection<DetailDocument, WhatMasterNeedsToKnowAboutDetail>>();
             Assert.IsNotNull(obj);
         }
 
@@ -29,7 +30,7 @@ namespace GeniusCode.RavenDb.Tests
         {
             DetailDocument detail;
             MasterDocument master = Helpers.BuildSimpleMasterAndDetail(out detail);
-            DocumentPlaceholderCollection<DetailDocument> toSerialize = master.DetailPlaceHolders;
+            DocumentPlaceholderCollection<DetailDocument, WhatMasterNeedsToKnowAboutDetail> toSerialize = master.DetailPlaceHolders;
             string myString = toSerialize.SerializeToString();
             Assert.IsNotNullOrEmpty(myString);
         }

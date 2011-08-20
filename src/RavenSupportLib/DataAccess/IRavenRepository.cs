@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Raven.Client.Indexes;
 using Raven.Client.Linq;
 
-namespace GeniusCode.RavenDb
+namespace GeniusCode.RavenDb.DataAccess
 {
     public interface IRavenRepository
     {
