@@ -29,46 +29,42 @@ namespace GeniusCode.RavenDb
         #endregion
 
         public static DocumentPlaceholder<T>
-            CreatePlaceholderAndUpdateReverseCollection(T t, IDocumentPlaceholderCollection reverseCollection,
-                                                                                         IDocument currentDoc)
+            CreatePlaceholderAndUpdateReverseCollection(int targetId, IDocumentPlaceholderCollection reverseCollection,
+                                                        int currentDocId)
         {
-            UpdatePointerCollectionReverse(reverseCollection, currentDoc);
-            return CreatePlaceholder(t);
+            UpdatePointerCollectionReverse(reverseCollection, currentDocId);
+            return CreatePlaceholder(targetId);
         }
 
         private static void UpdatePointerCollectionReverse(IDocumentPlaceholderCollection reverseCollection,
-                                                           IDocument currentDoc)
+                                                           int currentDocId)
         {
-            reverseCollection.AddIfNew(currentDoc);
+            reverseCollection.AddIfNew(currentDocId);
         }
 
-        public static DocumentPlaceholder<T> CreatePlaceholder(T t)
+        public static DocumentPlaceholder<T> CreatePlaceholder(int id)
         {
-            return GetPointer(t);
+            return GetPointer(id);
         }
 
 
-        public static DocumentPlaceholder<T> CreatePlaceholderAndReverse(T t, IDocumentPlaceholder reversePlaceholder,
-                                                                         IDocument currentDoc)
+        public static DocumentPlaceholder<T> CreatePlaceholderAndReverse(int targetId, IDocumentPlaceholder reversePlaceholder,
+                                                                         int currentDocId)
         {
-            UpdatePeerPointerReverse(reversePlaceholder, currentDoc);
-            return CreatePlaceholder(t);
+            UpdatePeerPointerReverse(reversePlaceholder, currentDocId);
+            return CreatePlaceholder(targetId);
         }
 
         private static void UpdatePeerPointerReverse(IDocumentPlaceholder reversePlaceholder,
-                                                     IDocument currentDoc)
+                                                     int currentDocId)
         {
             if (reversePlaceholder == null) throw new ArgumentNullException("reversePlaceholder");
-            if (currentDoc == null) throw new ArgumentNullException("currentDoc");
-
-
-            reversePlaceholder.DocId = currentDoc.Id;
-            reversePlaceholder.Name = GetNameFromDocumentUsingReflection(currentDoc);
+            reversePlaceholder.DocId = currentDocId;
         }
 
-        internal static DocumentPlaceholder<T> GetPointer(T t)
+        internal static DocumentPlaceholder<T> GetPointer(int id)
         {
-            var documentPlaceholder = new DocumentPlaceholder<T> { DocId = t.Id, Name = GetNameFromDocumentUsingReflection(t) };
+            var documentPlaceholder = new DocumentPlaceholder<T> { DocId = id };
             return documentPlaceholder;
         }
 

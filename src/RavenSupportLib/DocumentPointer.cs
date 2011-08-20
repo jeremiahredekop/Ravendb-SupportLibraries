@@ -16,7 +16,7 @@ namespace GeniusCode.RavenDb
         #endregion
 
         public DocumentPointer()
-            : this((Inflector.Pluralize(typeof (T).Name)))
+            : this((Inflector.Pluralize(typeof(T).Name)))
         {
         }
 
@@ -41,7 +41,7 @@ namespace GeniusCode.RavenDb
 
         public Type DocumentType
         {
-            get { return typeof (T); }
+            get { return typeof(T); }
         }
 
 

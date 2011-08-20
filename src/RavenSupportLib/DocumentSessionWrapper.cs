@@ -9,7 +9,7 @@ namespace GeniusCode.RavenDb
     {
         #region Fields
 
-        private readonly IDocumentStore _Store;
+        private readonly IDocumentStore _store;
         private readonly bool _disposeStore;
 
         #endregion
@@ -18,13 +18,13 @@ namespace GeniusCode.RavenDb
 
         public DocumentSessionWrapper(IDocumentStore store)
         {
-            _Store = store;
+            _store = store;
         }
 
         public DocumentSessionWrapper(string url)
         {
-            _Store = new DocumentStore {Url = url};
-            _Store.Initialize();
+            _store = new DocumentStore { Url = url };
+            _store.Initialize();
             _disposeStore = true;
         }
 
@@ -35,14 +35,14 @@ namespace GeniusCode.RavenDb
         public void Dispose()
         {
             if (_disposeStore)
-                _Store.Dispose();
+                _store.Dispose();
         }
 
         #endregion
 
         public void DoOnSessionWithSave(Action<IDocumentSession> sessionAction)
         {
-            bool save = true;
+            const bool save = true;
             DoOnSession(sessionAction, save);
         }
 
@@ -59,7 +59,7 @@ namespace GeniusCode.RavenDb
 
         public void DoOnRepositoryWithSave(Action<IRavenRepository> repAction)
         {
-            bool save = true;
+            const bool save = true;
             DoOnRepository(repAction, save);
         }
 
@@ -87,9 +87,9 @@ namespace GeniusCode.RavenDb
 
         private void Perform_Do(Action<IDocumentSession, IDocumentStore> sessionAction)
         {
-            using (IDocumentSession session = _Store.OpenSession())
+            using (var session = _store.OpenSession())
             {
-                sessionAction(session, _Store);
+                sessionAction(session, _store);
             }
         }
 
@@ -97,9 +97,9 @@ namespace GeniusCode.RavenDb
         {
             using (var t = new TransactionScope())
             {
-                using (IDocumentSession session = _Store.OpenSession())
+                using (var session = _store.OpenSession())
                 {
-                    sessionAction(session, _Store);
+                    sessionAction(session, _store);
                     session.SaveChanges();
                 }
                 t.Complete();

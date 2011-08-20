@@ -14,7 +14,7 @@ namespace GeniusCode.RavenDb
         public RavenRepository(IDocumentSession session, bool liveQueries)
         {
             _session = session;
-            _LiveQueries = liveQueries;
+            _liveQueries = liveQueries;
         }
 
         #endregion
@@ -24,7 +24,7 @@ namespace GeniusCode.RavenDb
         private IRavenQueryable<T> GetQuery<T, TIndexCreator>()
             where TIndexCreator : AbstractIndexCreationTask, new()
         {
-            if (_LiveQueries)
+            if (_liveQueries)
                 return _session.Query<T, TIndexCreator>().Customize(a => a.WaitForNonStaleResultsAsOfNow());
 
             return _session.Query<T, TIndexCreator>();
@@ -32,7 +32,7 @@ namespace GeniusCode.RavenDb
 
         private IRavenQueryable<T> GetQuery<T>()
         {
-            if (_LiveQueries)
+            if (_liveQueries)
                 return _session.Query<T>().Customize(a => a.WaitForNonStaleResultsAsOfNow());
 
             return _session.Query<T>();
@@ -42,7 +42,7 @@ namespace GeniusCode.RavenDb
 
         #region Assets
 
-        private readonly bool _LiveQueries;
+        private readonly bool _liveQueries;
         private readonly IDocumentSession _session;
 
         #endregion

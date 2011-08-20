@@ -7,7 +7,7 @@ using Raven.Json.Linq;
 
 namespace GeniusCode.RavenDb
 {
-    public static class IDocumentSessionExtensions
+    public static class DocumentSessionExtensions
     {
         public static PutCommandData ToPutCommandData(this RavenJObject itemToSave)
         {

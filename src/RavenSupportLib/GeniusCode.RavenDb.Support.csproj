@@ -77,7 +77,7 @@
     <Compile Include="DocumentPointer.cs" />
     <Compile Include="DocumentSessionWrapper.cs" />
     <Compile Include="IDocumentPointer.cs" />
-    <Compile Include="IDocumentSessionExtensions.cs" />
+    <Compile Include="DocumentSessionExtensions.cs" />
     <Compile Include="IRavenRepository.cs" />
     <Compile Include="Migrations\MigrationAction.cs" />
     <Compile Include="Migrations\MigrationHost.cs" />

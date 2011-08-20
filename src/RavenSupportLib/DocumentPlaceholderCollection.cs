@@ -9,17 +9,13 @@ namespace GeniusCode.RavenDb
     public class DocumentPlaceholderCollection<T> : IDocumentPlaceholderCollection
         where T : class, IDocument
     {
-
         [JsonIgnore]
         private Dictionary<int, DocumentPlaceholder<T>> _placeholdersDictionary =
             new Dictionary<int, DocumentPlaceholder<T>>();
 
         public DocumentPlaceholder<T>[] Items
         {
-            get
-            {
-                return _placeholdersDictionary.Values.ToArray();
-            }
+            get { return _placeholdersDictionary.Values.ToArray(); }
             set
             {
                 value = value ?? new DocumentPlaceholder<T>[] { };
@@ -27,20 +23,19 @@ namespace GeniusCode.RavenDb
             }
         }
 
-        public void AddIfNew(T item)
+        public void AddIfNew(int id)
         {
-            if (_placeholdersDictionary.ContainsKey(item.Id)) return;
+            if (_placeholdersDictionary.ContainsKey(id)) return;
 
-            var placeholder = DocumentPlaceholder<T>.GetPointer(item);
-            _placeholdersDictionary.Add(item.Id, placeholder);
+            DocumentPlaceholder<T> placeholder = DocumentPlaceholder<T>.GetPointer(id);
+            _placeholdersDictionary.Add(id, placeholder);
         }
 
         #region Implementation of IDocumentPlaceholderCollection
 
-        void IDocumentPlaceholderCollection.AddIfNew(object item)
+        void IDocumentPlaceholderCollection.AddIfNew(int id)
         {
-            var castedItem = (T)item;
-            AddIfNew(castedItem);
+            AddIfNew(id);
         }
 
         #endregion

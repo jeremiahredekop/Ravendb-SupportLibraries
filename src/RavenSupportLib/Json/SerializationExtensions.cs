@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using GeniusCode.RavenDb;
+﻿using System.IO;
 using Newtonsoft.Json;
 
 namespace System
@@ -18,7 +13,7 @@ namespace System
             return writer.ToString();
         }
 
-        public static T DeserializeFromString<T>(this string input) 
+        public static T DeserializeFromString<T>(this string input)
         {
             var reader = new StringReader(input);
             var jreader = new JsonTextReader(reader);
@@ -26,6 +21,5 @@ namespace System
             var output = jsonSerializer.Deserialize<T>(jreader);
             return output;
         }
-
     }
 }
