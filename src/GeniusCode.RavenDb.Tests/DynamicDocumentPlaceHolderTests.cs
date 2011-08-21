@@ -1,4 +1,5 @@
 ﻿using System.Dynamic;
+using GeniusCode.RavenDb.Data;
 using GeniusCode.RavenDb.Referential;
 using GeniusCode.RavenDb.Tests.MasterDetailDocuments;
 using NUnit.Framework;
@@ -11,18 +12,11 @@ namespace GeniusCode.RavenDb.Tests
         [Test]
         public void ShouldBeAbleToSetValueOnDynamicData()
         {
-            dynamic data = new ExpandoObject();
-
-            data.Cool = "Cool";
-            //NOTE: we can't have dynamic, as JSON needs a concrete type for serialization!!
-            DocumentPlaceholder<PeerDocument, ExpandoObject> placeholder = DocumentPlaceholder<PeerDocument, ExpandoObject>.CreatePlaceholder(100, data);
-
+            var bag = new Bag();
+            bag.Data.Cool = "Cool";
+            var placeholder = DocumentPlaceholder<PeerDocument>.CreatePlaceholder(100, bag);
             var placeholder2 = Helpers.SerializeCopyWithJSON(placeholder);
-
-            Assert.AreEqual("Cool", (placeholder2.Data as dynamic).Cool);
-
-
-
+            Assert.AreEqual("Cool", placeholder2.Data.Data.Cool);
         }
 
 

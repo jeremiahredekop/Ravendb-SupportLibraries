@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Bag.cs" />
     <Compile Include="Referential\DocumentPlaceholder.cs" />
     <Compile Include="Referential\DocumentPlaceholderCollection.cs" />
     <Compile Include="IDocument.cs" />

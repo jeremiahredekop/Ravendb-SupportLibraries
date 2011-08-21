@@ -1,4 +1,5 @@
 using System;
+using GeniusCode.RavenDb.Data;
 using Newtonsoft.Json;
 
 namespace GeniusCode.RavenDb.Referential
@@ -74,5 +75,9 @@ namespace GeniusCode.RavenDb.Referential
             var documentPlaceholder = new DocumentPlaceholder<T, TData> { DocId = targetId, Data = targetData };
             return documentPlaceholder;
         }
+    }
+
+    public class DocumentPlaceholder<T> : DocumentPlaceholder<T, Bag> where T : IDocument
+    {
     }
 }
