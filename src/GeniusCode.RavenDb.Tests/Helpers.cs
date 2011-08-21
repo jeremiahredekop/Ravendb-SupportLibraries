@@ -6,9 +6,16 @@ namespace GeniusCode.RavenDb.Tests
 {
     public class Helpers
     {
+
+        public static dynamic SerializeDynamicCopyWithJSON<T>(dynamic input)
+        {
+            return SerializeCopyWithJSON<T>(input) as dynamic;
+        }
+
         public static T SerializeCopyWithJSON<T>(T input)
         {
             string s = input.SerializeToString();
+
             var fromString = s.DeserializeFromString<T>();
             return fromString;
         }
@@ -32,6 +39,8 @@ namespace GeniusCode.RavenDb.Tests
                 .CreatePlaceholderAndReverse(peer.Id, peerData, peer.MasterDocumentPlaceHolder, master.Id, masterData);
             return peer;
         }
+
+
 
         public static MasterDocument BuildSimpleMasterAndDetail(out DetailDocument detail)
         {

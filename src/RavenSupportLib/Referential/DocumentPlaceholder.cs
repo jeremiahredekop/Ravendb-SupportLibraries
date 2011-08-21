@@ -5,12 +5,11 @@ namespace GeniusCode.RavenDb.Referential
 {
     public class DocumentPlaceholder<T, TData> : IDocumentPlaceholder
         where T : IDocument
-        where TData : IDocumentPointerData
     {
         [JsonIgnore]
         private readonly DocumentPointer<T> _docTypePointer = new DocumentPointer<T>();
 
-        IDocumentPointerData IDocumentPlaceholder.Data
+        object IDocumentPlaceholder.Data
         {
             get { return Data; }
             set { Data = (TData)value; }

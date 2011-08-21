@@ -14,6 +14,6 @@ namespace GeniusCode.RavenDb.Referential
         [JsonIgnore]
         int DocId { get; set; }
 
-        IDocumentPointerData Data { get; set; }
+        object Data { get; set; }
     }
 }

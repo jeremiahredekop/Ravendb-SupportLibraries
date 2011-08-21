@@ -76,8 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentPlaceHolderAPIUsageTests.cs" />
-    <Compile Include="DocumentPointerTests.cs" />
+    <Compile Include="DynamicDocumentPlaceHolderTests.cs" />
+    <Compile Include="SimpleDocumentPlaceholderTests.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="JSonSerializeTests.cs" />
     <Compile Include="MasterDetailDocuments\DetailDocument.cs" />
