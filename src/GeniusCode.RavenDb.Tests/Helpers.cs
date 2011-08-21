@@ -7,11 +7,6 @@ namespace GeniusCode.RavenDb.Tests
     public class Helpers
     {
 
-        public static dynamic SerializeDynamicCopyWithJSON<T>(dynamic input)
-        {
-            return SerializeCopyWithJSON<T>(input) as dynamic;
-        }
-
         public static T SerializeCopyWithJSON<T>(T input)
         {
             string s = input.SerializeToString();
