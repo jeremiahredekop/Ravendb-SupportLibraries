@@ -11,19 +11,19 @@ namespace GeniusCode.RavenDb.Data
     {
         public Bag()
         {
-                Expando = new ExpandoObject();
+                BackingExpando = new ExpandoObject();
         }
 
 
         [JsonProperty]
-        private ExpandoObject Expando { get; set; }
+        private ExpandoObject BackingExpando { get; set; }
 
         [JsonIgnore]
-        public dynamic Data
+        public dynamic BagData
         {
             get
             {
-                return Expando;
+                return BackingExpando;
             }
         }
     }

@@ -77,7 +77,11 @@ namespace GeniusCode.RavenDb.Referential
         }
     }
 
-    public class DocumentPlaceholder<T> : DocumentPlaceholder<T, Bag> where T : IDocument
+    public static class DocumentPlaceholder<T> where T : IDocument
     {
+        public static DocumentPlaceholder<T, Bag> CreatePlaceholder(int targetId)
+        {
+            return DocumentPlaceholder<T, Bag>.CreatePlaceholder(targetId, new Bag());
+        }
     }
 }

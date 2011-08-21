@@ -1,5 +1,4 @@
 ﻿using System.Dynamic;
-using GeniusCode.RavenDb.Data;
 using GeniusCode.RavenDb.Referential;
 using GeniusCode.RavenDb.Tests.MasterDetailDocuments;
 using NUnit.Framework;
@@ -12,11 +11,12 @@ namespace GeniusCode.RavenDb.Tests
         [Test]
         public void ShouldBeAbleToSetValueOnDynamicData()
         {
-            var bag = new Bag();
-            bag.Data.Cool = "Cool";
-            var placeholder = DocumentPlaceholder<PeerDocument>.CreatePlaceholder(100, bag);
+            var placeholder = DocumentPlaceholder<PeerDocument>.CreatePlaceholder(100);
+
+            placeholder.Data.BagData.Cool = "Cool";
+
             var placeholder2 = Helpers.SerializeCopyWithJSON(placeholder);
-            Assert.AreEqual("Cool", placeholder2.Data.Data.Cool);
+            Assert.AreEqual("Cool", placeholder2.Data.BagData.Cool);
         }
 
 
