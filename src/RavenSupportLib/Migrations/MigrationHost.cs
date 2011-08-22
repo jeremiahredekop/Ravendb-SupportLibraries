@@ -13,30 +13,30 @@ namespace GeniusCode.RavenDb.Migrations
         public MigrationHost(IDocumentStore store)
         {
             _store = store;
-            Actions = new List<MigrationAction>();
+            Actions = new List<IMigrationAction>();
         }
 
-        public List<MigrationAction> Actions { get; private set; }
+        public List<IMigrationAction> Actions { get; private set; }
 
         public void PerformActions()
         {
-            IEnumerable<ICommandData> query = from a in Actions
-                                              from c in GetCommandsForMigrationAction(a)
-                                              select c;
+            var query = from a in Actions
+                        from c in GetCommandsForMigrationAction(a)
+                        select c;
 
-            ICommandData[] cmds = query.ToArray();
+            var cmds = query.ToArray();
 
             if (cmds.Any())
                 _store.DatabaseCommands.Batch(cmds);
         }
 
-        private IEnumerable<ICommandData> GetCommandsForMigrationAction(MigrationAction action)
+        private IEnumerable<ICommandData> GetCommandsForMigrationAction(IMigrationAction action)
         {
             var loop = new AyendesJSonQueryResultsLoop(_store,
                                                        action.IndexName,
                                                        action.QueryContents);
-            List<ICommandData> commands = loop.GetCommandToModifyJSONItems(action.GetReplacement);
 
+            var commands = loop.GetCommandToModifyJSONItems(action.GetReplacement);
             return commands;
         }
     }

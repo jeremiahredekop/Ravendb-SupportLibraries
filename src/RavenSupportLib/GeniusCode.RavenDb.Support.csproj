@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Bag.cs" />
+    <Compile Include="Json\RavenJObjectExtensions.cs" />
+    <Compile Include="Migrations\IMigrationAction.cs" />
     <Compile Include="Referential\DocumentPlaceholder.cs" />
     <Compile Include="Referential\DocumentPlaceholderCollection.cs" />
     <Compile Include="IDocument.cs" />

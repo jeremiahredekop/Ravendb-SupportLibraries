@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DynamicDocumentPlaceHolderTests.cs" />
+    <Compile Include="MigrationDocument_Tests.cs" />
     <Compile Include="SimpleDocumentPlaceholderTests.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="JSonSerializeTests.cs" />

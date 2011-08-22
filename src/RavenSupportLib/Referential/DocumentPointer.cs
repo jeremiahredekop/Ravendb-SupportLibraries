@@ -55,14 +55,14 @@ namespace GeniusCode.RavenDb.Referential
         private void SetKeyFromId(int value)
         {
             _id = value;
-            string newKey = IdToKey(_id, _keyRootName);
+            var newKey = IdToKey(_id, _keyRootName);
             _key = newKey;
         }
 
         private void SetIdFromKey(string value)
         {
             _key = value;
-            int newId = KeyToId(_key, _keyRootName);
+            var newId = KeyToId(_key, _keyRootName);
             _id = newId;
         }
 

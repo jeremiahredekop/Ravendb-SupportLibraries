@@ -7,12 +7,12 @@ namespace GeniusCode.RavenDb.Loops
     {
         protected abstract List<T> PerformQuery(int queryStartPosition);
 
-        public void Do(Action<List<T>> batchAction)
+        private void Do(Action<List<T>> batchAction)
         {
-            int count = 0;
+            var count = 0;
             do
             {
-                List<T> q = PerformQuery(count);
+                var q = PerformQuery(count);
 
                 if (q.Count == 0)
                     break;

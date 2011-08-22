@@ -31,7 +31,7 @@ namespace GeniusCode.RavenDb.Loops
 
         protected override List<RavenJObject> PerformQuery(int queryStartPosition)
         {
-            QueryResult q = _documentStore.DatabaseCommands.Query(_indexName, new IndexQuery
+            var q = _documentStore.DatabaseCommands.Query(_indexName, new IndexQuery
                                                                                   {
                                                                                       Query = _queryContents,
                                                                                       PageSize = _querySize,
@@ -45,14 +45,14 @@ namespace GeniusCode.RavenDb.Loops
         {
             var cmds = new List<ICommandData>();
 
-            List<RavenJObject> items = GetAll();
+            var items = GetAll();
 
             items.ForEach(ri =>
                               {
-                                  RavenJObject itemToSave = toApply(ri);
+                                  var itemToSave = toApply(ri);
                                   if (itemToSave != null)
                                   {
-                                      PutCommandData putData = itemToSave.ToPutCommandData();
+                                      var putData = itemToSave.ToPutCommandData();
                                       cmds.Add(putData);
                                   }
                               });
