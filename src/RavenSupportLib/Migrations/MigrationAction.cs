@@ -39,25 +39,62 @@ namespace GeniusCode.RavenDb.Migrations
 
     public class MigrationAction<TCurrent, TPrevious> : IMigrationAction
     {
-        private readonly Action<TCurrent, TPrevious> _toPerform;
-        private readonly IMigrationAction _migrationAction;
+        private IMigrationAction _migrationAction;
 
-        public MigrationAction(Action<TCurrent, TPrevious> toPerform)
+
+        /// <summary>
+        /// Returns a migration action that represents merging data.  The func will recieve a previous instance, 
+        /// and must build a current instance to persist.
+        /// </summary>
+        /// <param name="toPerform">To perform.</param>
+        /// <returns></returns>
+        public static IMigrationAction AsReplace(Func<TPrevious, TCurrent> toPerform)
         {
-            _toPerform = toPerform;
+
+            Func<RavenJObject, RavenJObject> updater = a =>
+            {
+                var previous = a.DeserializeToObject<TPrevious>();
+                var current = toPerform(previous);
+
+                var rjo = current.SerializeToRavenJObject(a.Value<RavenJObject>("@metadata"));
+                return rjo;
+            };
+
+            var ma = new MigrationAction<TCurrent, TPrevious>
+            {
+                _migrationAction = MigrationAction.CreateForType<TCurrent>(updater)
+            };
+
+            return ma;
+        }
+
+        /// <summary>
+        /// Returns a migration action that represents merging data.  The action will recieve a current and previous instance.
+        /// The current instance will already have data contained.
+        /// </summary>
+        /// <param name="toPerform">To perform.</param>
+        /// <returns></returns>
+        public static IMigrationAction AsMerge(Action<TCurrent, TPrevious> toPerform)
+        {
 
             Func<RavenJObject, RavenJObject> updater = a =>
             {
                 var current = a.DeserializeToObject<TCurrent>();
                 var previous = a.DeserializeToObject<TPrevious>();
 
-                _toPerform(current, previous);
+                toPerform(current, previous);
 
                 var rjo = current.SerializeToRavenJObject(a.Value<RavenJObject>("@metadata"));
                 return rjo;
             };
 
-            _migrationAction = MigrationAction.CreateForType<TCurrent>(updater);
+
+            var ma = new MigrationAction<TCurrent, TPrevious>
+            {
+                _migrationAction = MigrationAction.CreateForType<TCurrent>(updater)
+            };
+
+            return ma;
         }
 
         #region Implementation of IMigrationAction

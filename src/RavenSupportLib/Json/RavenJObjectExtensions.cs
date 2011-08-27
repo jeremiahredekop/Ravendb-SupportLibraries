@@ -22,10 +22,18 @@ namespace System
             return item;
         }
 
-        internal static RavenJObject SerializeToRavenJObject(this object input, RavenJObject metadata)
+        public static RavenJObject SerializeToRavenJObject(this object input, RavenJObject metadata)
         {
             var obj = RavenJObject.FromObject(input);
             obj["@metadata"] = metadata;
+            return obj;
+        }
+
+        public static RavenJObject DeserializeToRavenJObject(this string input)
+        {
+            var stringReader = new StringReader(input);
+            var textReader = new JsonTextReader(stringReader);
+            var obj = RavenJObject.Load(textReader);
             return obj;
         }
 

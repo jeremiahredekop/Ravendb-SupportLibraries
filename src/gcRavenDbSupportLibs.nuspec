@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>gcRavenDbSupportLibs</id>
+    <version>1.0</version>
+    <title>RavenDb Support Libraries</title>
+    <authors>JeremiahRedekop,Ryan D Hatch</authors>
+    <owners>GeniusCode,LLC</owners>
+    <projectUrl>https://github.com/jeremiahredekop/Ravendb-SupportLibraries</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Helpers Classes for RavenDb</description>
+    <summary>Helpers Classes for RavenDb.</summary>
+    <tags>RavenDb</tags>
+    <dependencies>
+      <dependency id="RavenDB" version="1.0.0.427>" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="RavenSupportLib\bin\Release\GeniusCode.RavenDb.dll" target="lib\net40\GeniusCode.RavenDb.dll" />
+  </files>
+</package>
