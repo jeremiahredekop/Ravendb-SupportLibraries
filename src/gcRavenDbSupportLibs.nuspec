@@ -12,7 +12,7 @@
     <summary>Helpers Classes for RavenDb.</summary>
     <tags>RavenDb</tags>
     <dependencies>
-      <dependency id="RavenDB" version="1.0.0.427>" />
+      <dependency id="RavenDB" version="1.0.0.427" />
     </dependencies>
   </metadata>
   <files>
