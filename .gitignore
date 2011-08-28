@@ -5,7 +5,7 @@ AssemblyInfo.cs
 src/*/obj
 src/*/bin
 samples/*/obj
-src/packages
+
 samples/*/bin
 *.csproj.user
 *ReSharper.user
